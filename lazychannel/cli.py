@@ -12,7 +12,6 @@ def basic_args(parser):  # pragma: no cover
                         help='display additional logging information')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help='squash all output')
-    parser.add_argument('--version', help="Display version of lazychannel")
 
 
 def global_args(parser):  # pragma: no cover
@@ -24,7 +23,7 @@ def global_args(parser):  # pragma: no cover
 
 def setup_parser():
     p = argparse.ArgumentParser(prog='lazychannel',
-                                description='An easy way to keep up with'
+                                description='An easy way to keep up with '
                                             'music in the 21st century')
     sp = p.add_subparsers(title='actions', dest='action', metavar='actions')
 

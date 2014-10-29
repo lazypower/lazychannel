@@ -3,6 +3,7 @@ import logging
 import subprocess
 import shlex
 import os
+import unicodedata as ucode
 
 class youtube:
     def __init__(self, cache_file):
@@ -22,12 +23,16 @@ class youtube:
             return
         for v in videos['feed']['entry']:
             link = v['link'][0]['href']
+            title = ucode.normalize('NFKD', v['title']['$t']).encode('ascii', 'ignore')
             if not self.in_cache(link):
-                self.log.info('Fetching {}'.format(v['title']['$t']))
+                self.log.info('Fetching {}'.format(title))
                 self.call_downloader(out, link)
-            self.log.debug('Cache Hit on: {} - skipping'.format(v['title']['$t']))
+            else:
+                self.log.debug('Cache Hit on: {} - skipping'.format(title))
 
     def in_cache(self, link):
+        # obnoxious bug
+        link = "{}\n".format(link)
         with open(self.cache_file, 'r') as f:
             cache = f.readlines()
         if link in cache:

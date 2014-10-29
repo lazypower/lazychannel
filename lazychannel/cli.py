@@ -31,13 +31,18 @@ def setup_parser():
     init.add_argument('workspace', default='~/.lazychannel',
                       help='Define path to warehouse config and databases')
 
+    fetch = sp.add_parser('sync', help='Sync channels')
+    fetch.add_argument('-d', default='~/Music/lazychannel',
+                       help="Directory for output")
+
     basic_args(init)
+    global_args(fetch)
 
     return p
 
 
 def setup_logging(verbose=None, debug=None):  # pragma: no cover
-    logger = logging.getLogger('cabs')
+    logger = logging.getLogger('lazychannel')
     logger.setLevel(logging.INFO)
     if debug:
         logger.setLevel(logging.DEBUG)

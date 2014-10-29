@@ -1,10 +1,13 @@
 import os
 import logging
-import config
+from config import config
 
 log = logging.getLogger('lazychannel.init')
 
 def create_config(ws, cfg):
+    if cfg.exists():
+        logging.warn('Config exists, doing nothing')
+        return
     try:
         os.makedirs(ws)
     except:
@@ -22,9 +25,4 @@ def main(args, unknown):
     log.info('Creating %s' % ws)
 
     c = config(ws)
-
-    try:
-        create_config(ws, c)
-    except OSError:
-        log.error('%s already exists' % ws)
-        return 1
+    create_config(ws, c)

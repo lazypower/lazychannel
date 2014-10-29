@@ -6,8 +6,15 @@ setup(
     version="1.0.0",
     description="Fetch things daily!",
     license="LGPLv3",
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+             'lazy = lazychannel.cli:main'
+        ],
+    },
     install_requires=[
         'requests',
         'gdata',
     ],
 )
+

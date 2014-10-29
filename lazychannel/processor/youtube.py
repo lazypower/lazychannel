@@ -7,7 +7,7 @@ import os
 class youtube:
     def __init__(self, cache_file):
         self.log = logging.getLogger('lazychannel.worker.youtube')
-        self.BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results=1&alt=json&orderby=published&author={}"
+        self.BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results=50&alt=json&orderby=published&author={}"
         self.cache_file = cache_file
 
     def fetch_channel(self, uuid):

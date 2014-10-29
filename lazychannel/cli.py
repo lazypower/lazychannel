@@ -12,6 +12,7 @@ def basic_args(parser):  # pragma: no cover
                         help='display additional logging information')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help='squash all output')
+    parser.add_argument('--version', help="Display version of lazychannel")
 
 
 def global_args(parser):  # pragma: no cover
@@ -23,8 +24,8 @@ def global_args(parser):  # pragma: no cover
 
 def setup_parser():
     p = argparse.ArgumentParser(prog='lazychannel',
-                                description="An easy way to keep up with"
-                                            "music in the 21st century")
+                                description='An easy way to keep up with'
+                                            'music in the 21st century')
     sp = p.add_subparsers(title='actions', dest='action', metavar='actions')
 
     init = sp.add_parser('init', help='Create config file')
@@ -34,6 +35,10 @@ def setup_parser():
     fetch = sp.add_parser('sync', help='Sync channels')
     fetch.add_argument('-d', default='~/Music/lazychannel',
                        help="Directory for output")
+
+    # add static version action
+    sp.add_parser('version', help='print version')
+
 
     basic_args(init)
     global_args(fetch)
@@ -70,12 +75,16 @@ def main(args=None):
   parser = setup_parser()
   known, unknown = parser.parse_known_args(args)
 
+  if known.action == 'version':
+    import pkg_resources
+    print pkg_resources.require('lazychannel')[0].version
+    sys.exit(0)
+
   log = setup_logging(verbose=known.verbose, debug=known.debug)
 
   # TODO: make this cleaner
   if known.action == 'init':
       known.action = 'generate'
-
 
   log.debug('arguments: %s, unknowns: %s' % (str(known), str(unknown)))
 

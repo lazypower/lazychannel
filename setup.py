@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name="lazychannel",
-    version="1.0.0",
+    version="0.1.0",
     description="Fetch things daily!",
     license="LGPLv3",
     packages=find_packages(),

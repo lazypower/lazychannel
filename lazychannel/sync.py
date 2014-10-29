@@ -5,13 +5,14 @@ from helpers import pexpand
 
 log = logging.getLogger('lazychannel.sync')
 
-def parse_youtube(channels, out):
+def parse_youtube(channels, out, ws):
     from processor.youtube import youtube
     logging.info('Initialized youtube processor')
-    yt = youtube()
+    cache_path = "{}{}youtube-cache".format(ws, os.path.sep)
+    yt = youtube(cache_path)
     for chan in channels:
         log.info("Processing {}".format(chan))
-        odir = os.path.join(out, chan)
+        odir = pexpand(os.path.join(out, chan))
         if not os.path.exists(odir):
             output_dir(odir)
         yt.download(channels[chan], odir)
@@ -27,10 +28,9 @@ def main(args, unknown):
 
     ws = pexpand(args.workspace)
     c = config(ws).load_config()
-
     output_dir(pexpand(args.d))
 
     if c.has_key('youtube'):
-        parse_youtube(c['youtube'], args.d)
+        parse_youtube(c['youtube'], args.d, ws)
 
     log.info('Sync Complete - \oo/, Rock on my friend.')

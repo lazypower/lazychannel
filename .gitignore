@@ -2,3 +2,5 @@
 build
 dist
 lazychannel.egg-info
+venv
+.coverage

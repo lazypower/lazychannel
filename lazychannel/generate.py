@@ -4,6 +4,7 @@ from config import config
 
 log = logging.getLogger('lazychannel.init')
 
+
 def create_config(ws, cfg):
     if cfg.exists():
         logging.warn('Config exists, doing nothing')
@@ -16,6 +17,7 @@ def create_config(ws, cfg):
         f.write("youtube:\n")
         f.write("    name: uuid")
         logging.info('Created skeleton config. Populate with data')
+
 
 def main(args, unknown):
     if unknown:

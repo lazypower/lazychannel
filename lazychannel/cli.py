@@ -5,6 +5,7 @@ import sys
 import importlib
 import logging
 
+
 def basic_args(parser):  # pragma: no cover
     parser.add_argument('--debug', action='store_true',
                         help='display debug output, implies -v')
@@ -18,7 +19,6 @@ def global_args(parser):  # pragma: no cover
     basic_args(parser)
     parser.add_argument('-w', '--workspace', default='~/.lazychannel',
                         help='the workspace')
-
 
 
 def setup_parser():
@@ -37,7 +37,6 @@ def setup_parser():
 
     # add static version action
     sp.add_parser('version', help='print version')
-
 
     basic_args(init)
     global_args(fetch)
@@ -71,38 +70,35 @@ def setup_logging(verbose=None, debug=None):  # pragma: no cover
 
 
 def main(args=None):
-  parser = setup_parser()
-  known, unknown = parser.parse_known_args(args)
+    parser = setup_parser()
+    known, unknown = parser.parse_known_args(args)
 
-  if known.action == 'version':
-    import pkg_resources
-    print pkg_resources.require('lazychannel')[0].version
-    sys.exit(0)
+    if known.action == 'version':
+        import pkg_resources
+        print pkg_resources.require('lazychannel')[0].version
+        sys.exit(0)
 
-  log = setup_logging(verbose=known.verbose, debug=known.debug)
+    log = setup_logging(verbose=known.verbose, debug=known.debug)
 
-  # TODO: make this cleaner
-  if known.action == 'init':
-      known.action = 'generate'
+    # TODO: make this cleaner
+    if known.action == 'init':
+        known.action = 'generate'
 
-  log.debug('arguments: %s, unknowns: %s' % (str(known), str(unknown)))
+    log.debug('arguments: %s, unknowns: %s' % (str(known), str(unknown)))
 
-  try:
-    action = importlib.import_module("..%s" % known.action,
-                                     'lazychannel.%s' % known.action)
-    log.debug('accessing %s.main' % known.action)
-    exit = action.main(known, unknown)
-  except Exception as e:
-    if known.debug:
-        log.exception(e.message)
-    else:
-        log.critical(e.message)
-    exit = 1
+    try:
+        action = importlib.import_module("..%s" % known.action,
+                                         'lazychannel.%s' % known.action)
+        log.debug('accessing %s.main' % known.action)
+        exit = action.main(known, unknown)
+    except Exception as e:
+        if known.debug:
+            log.exception(e.message)
+        else:
+            log.critical(e.message)
+            exit = 1
 
     sys.exit(exit)
-
-
-
 
 if __name__ == "__main__":
     main()

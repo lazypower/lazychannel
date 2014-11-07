@@ -5,10 +5,12 @@ import shlex
 import os
 import unicodedata as ucode
 
+
 class youtube:
     def __init__(self, cache_file):
         self.log = logging.getLogger('lazychannel.worker.youtube')
-        self.BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results=50&alt=json&orderby=published&author={}"
+        self.BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results"
+        "=50&alt=json&orderby=published&author={}"
         self.cache_file = cache_file
 
     def fetch_channel(self, uuid):
@@ -18,12 +20,13 @@ class youtube:
 
     def download(self, uuid, out):
         videos = self.fetch_channel(uuid)
-        if not 'entry' in videos['feed']:
+        if 'entry' not in videos['feed']:
             self.log.error('No feed found, assuming account deleted.')
             return
         for v in videos['feed']['entry']:
             link = v['link'][0]['href']
-            title = ucode.normalize('NFKD', v['title']['$t']).encode('ascii', 'ignore')
+            title = ucode.normalize('NFKD', v['title']['$t'])
+            title = title.encode('ascii', 'ignore')
             if not self.in_cache(link):
                 self.log.info('Fetching {}'.format(title))
                 self.call_downloader(out, link)
@@ -46,8 +49,3 @@ class youtube:
         subprocess.check_output(cmd)
         with open(self.cache_file, 'a+') as f:
             f.write("{}\n".format(link))
-
-
-#
-# for i in c['feed']['entry']:
-#     print i['link'][0]['href']

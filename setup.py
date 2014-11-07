@@ -9,7 +9,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-             'lazy = lazychannel.cli:main'
+            'lazy = lazychannel.cli:main'
         ],
     },
     install_requires=[
@@ -17,4 +17,3 @@ setup(
         'pyyaml',
     ],
 )
-

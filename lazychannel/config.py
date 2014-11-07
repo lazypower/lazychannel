@@ -2,14 +2,12 @@ import yaml
 import os
 import logging
 
-#CONFIG = os.path.expanduser('~/.lazychannel/config.yaml')
 
 class config:
-    def __init__(self,ws):
+    def __init__(self, ws):
         ws = os.path.expanduser(ws)
         self.config = os.path.join(ws, 'config.yaml')
         self.log = logging.getLogger('lazychannel.config')
-
 
     # i'm so sorry, this is ugly.
     def dir(self):
@@ -26,4 +24,4 @@ class config:
                 conf = yaml.safe_load(f.read())
             return conf
         self.log.critical('Unable to locate config. Perhaps you need to run'
-                         ' lazychannel init?')
+                          ' lazychannel init?')

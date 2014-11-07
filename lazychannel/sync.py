@@ -5,6 +5,7 @@ from helpers import pexpand
 
 log = logging.getLogger('lazychannel.sync')
 
+
 def parse_youtube(channels, out, ws):
     from processor.youtube import youtube
     logging.info('Initialized youtube processor')
@@ -17,10 +18,12 @@ def parse_youtube(channels, out, ws):
             output_dir(odir)
         yt.download(channels[chan], odir)
 
+
 def output_dir(out):
     if not os.path.exists(out):
         log.info("Creating directory {}".format(out))
         os.makedirs(out)
+
 
 def main(args, unknown):
     if unknown:
@@ -30,7 +33,7 @@ def main(args, unknown):
     c = config(ws).load_config()
     output_dir(pexpand(args.d))
 
-    if c.has_key('youtube'):
+    if 'youtube' in c:
         parse_youtube(c['youtube'], args.d, ws)
 
     log.info('Sync Complete - \oo/, Rock on my friend.')

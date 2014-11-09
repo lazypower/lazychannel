@@ -12,7 +12,8 @@ def create_config(ws, cfg):
     try:
         os.makedirs(ws)
     except:
-        pass
+        log.debug('Skipping directory creation')
+
     with open(cfg.config, 'w+') as f:
         f.write("youtube:\n")
         f.write("    name: uuid")

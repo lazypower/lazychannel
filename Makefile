@@ -21,7 +21,7 @@ coverage: develop clean
 	@venv/bin/nosetests tests --with-coverage --cover-package=lazychannel
 
 lint: develop
-	@find $(sources) -type f \( -iname '*.py' ! -iwholename './venv/*' ! -iwholename './tests/*' \) -print0 | xargs -r0 venv/bin/flake8
+	@find $(sources) -type f \( -iname '*.py' ! -iwholename './venv/*' ! -iwholename './tests/*'  ! -iwholename './build/*'\) -print0 | xargs -r0 venv/bin/flake8
 
 develop: setup venv/lib/python*/site-packages/lazychannel.egg-link
 venv/lib/python*/site-packages/lazychannel.egg-link:

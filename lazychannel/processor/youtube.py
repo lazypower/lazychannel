@@ -4,6 +4,7 @@ import subprocess
 import shlex
 import os
 import unicodedata as ucode
+from lazychannel.helpers import pexpand, output_dir
 
 
 class youtube:
@@ -49,3 +50,11 @@ class youtube:
         subprocess.check_output(cmd)
         with open(self.cache_file, 'a+') as f:
             f.write("{}\n".format(link))
+
+    def main(self, channels, out, ws):
+        self.log.info('Initialized youtube processor')
+        for chan in channels:
+            self.log.info("Processing {}".format(chan))
+            out = pexpand(os.path.join(out, chan))
+            output_dir(out)
+            self.download(channels[chan], out)

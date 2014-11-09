@@ -20,9 +20,12 @@ class TestConfig(unittest.TestCase):
         mo.return_value.__exit__ = Mock()
         cfg = MagicMock()
         cfg.exists.return_value = False
+        mkm.side_effect= Exception("Boom!")
+        generate.log = MagicMock()
 
         generate.create_config('/tmp', cfg)
         mo.return_value.write.assert_called_with("    name: uuid")
+        generate.log.debug.assert_called_once()
 
     @patch('builtins.open' if sys.version_info > (3,) else '__builtin__.open')
     def test_create_config_skips_when_exists(self, mo):

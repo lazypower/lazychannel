@@ -1,6 +1,6 @@
 import unittest
 import sys
-from mock import patch, Mock
+from mock import patch, Mock, MagicMock
 from lazychannel.config import config
 
 CFG_YML = """settings:
@@ -38,3 +38,10 @@ class TestConfig(unittest.TestCase):
 
         c = config('/tmp').load_config()
         self.assertEqual(c['settings']['limit'], 15)
+
+    @patch('lazychannel.config.config.exists')
+    def test_load_config_logging(self, me):
+        me.return_value = False
+        config.log = MagicMock()
+        config('/tmp').load_config()
+        config.log.critical.assert_called_once()

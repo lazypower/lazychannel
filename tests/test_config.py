@@ -16,10 +16,6 @@ class TestConfig(unittest.TestCase):
         c = config('/tmp')
         self.assertEqual(c.config, '/tmp/config.yaml')
 
-    def test_dir(self):
-        c = config('/tmp')
-        self.assertEqual(c.dir(), '/tmp')
-
     @patch('os.path.exists')
     def test_exists(self, exmock):
         exmock.return_value = True

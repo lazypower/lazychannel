@@ -9,10 +9,6 @@ class config:
         self.config = os.path.join(ws, 'config.yaml')
         self.log = logging.getLogger('lazychannel.config')
 
-    # i'm so sorry, this is ugly.
-    def dir(self):
-        return os.path.sep.join(self.config.split(os.path.sep)[0:-1])
-
     def exists(self):
         if os.path.exists(self.config):
             return True

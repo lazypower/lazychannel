@@ -1,14 +1,17 @@
 import unittest
 import sys
+import yaml
 from mock import patch, Mock, MagicMock
 from lazychannel.config import config
 
 CFG_YML = """settings:
     dir: ~/Music
     limit: 15
-youtube:
-    osdir: 123123
+channels:
+    youtube:
+        osdir: 123123
 """
+
 
 class TestConfig(unittest.TestCase):
 
@@ -35,9 +38,27 @@ class TestConfig(unittest.TestCase):
         c = config('/tmp').load_config()
         self.assertEqual(c['settings']['limit'], 15)
 
+    @patch('lazychannel.config.config.log')
     @patch('lazychannel.config.config.exists')
-    def test_load_config_logging(self, me):
-        me.return_value = False
-        config.log = MagicMock()
-        config('/tmp').load_config()
-        config.log.critical.assert_called_once()
+    def test_load_config(self, exmock, mlog):
+        exmock.return_value = False
+        c = config('/tmp')
+        self.assertRaises(Exception, c.load_config)
+        mlog.critical.assert_called_once()
+
+
+    @patch('lazychannel.config.config.load_config')
+    @patch('lazychannel.config.config.exists')
+    def test_settings(self, me, mlc):
+        me.return_value = True
+        mlc.return_value = yaml.load(CFG_YML)
+        c = config('/tmp')
+        self.assertEqual(c.settings(), {'dir': '~/Music', 'limit': 15})
+
+    @patch('lazychannel.config.config.load_config')
+    @patch('lazychannel.config.config.exists')
+    def test_channels(self, me, mlc):
+        me.return_value = True
+        mlc.return_value = yaml.load(CFG_YML)
+        c = config('/tmp')
+        self.assertEqual(c.channels(), {'youtube': {'osdir': 123123}})

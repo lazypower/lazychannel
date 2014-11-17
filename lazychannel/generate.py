@@ -15,8 +15,12 @@ def create_config(ws, cfg):
         log.debug('Skipping directory creation')
 
     with open(cfg.config, 'w+') as f:
+        f.write("settings:\n")
+        f.write("    dir: ~/Music/lazychannel\n")
+        f.write("    limit: 5\n")
+        f.write('    cache: "{}.cache"\n')
         f.write("youtube:\n")
-        f.write("    name: uuid")
+        f.write("    ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
         logging.info('Created skeleton config. Populate with data')
 
 

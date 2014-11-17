@@ -12,6 +12,10 @@ setup(
     name="lazychannel",
     version="0.1.2",
     description="Fetch media from remote sources daily!",
+    author="Charles Butler",
+    author_email="chuck@dasroot.net",
+    url="https://github.com/chuckbutler/lazychannel",
+    download_url="https://github.com/chuckbutler/lazychannel/archive/v0.1.2.tar.gz",
     license="LGPLv3",
     packages=find_packages(),
     entry_points={

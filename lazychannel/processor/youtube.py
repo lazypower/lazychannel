@@ -4,19 +4,28 @@ import subprocess
 import shlex
 import os
 import unicodedata as ucode
-from lazychannel.helpers import pexpand, output_dir
+from lazychannel.helpers import pexpand, output_dir, touch_file
 
 log = logging.getLogger('lazychannel.worker.youtube')
-BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results=50&alt=json&orderby=published&author={}"
-cache_file = 'foo.cache'
+LIMIT = 50
+BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results={}&alt=json&orderby=published&author={}"
+CACHE_FILE = 'foo.cache'
+OUT_DIR = os.path.join(os.path.sep, 'tmp')
+
 
 
 def parse_config(cfg):
-    pass
+    settings = cfg.settings()
+    global OUT_DIR
+    global CACHE_FILE
+    global LIMIT
+    OUT_DIR = settings['dir']
+    CACHE_FILE = os.path.join(cfg.dir, settings['cache'].format('youtube'))
+    LIMIT = settings['limit']
 
 
 def fetch_channel(uuid):
-    channel_url = BASE_URL.format(uuid)
+    channel_url = BASE_URL.format(LIMIT, uuid)
     channel_list = requests.get(channel_url).json()
     return channel_list
 
@@ -40,7 +49,11 @@ def download(uuid, out):
 def in_cache(link):
     # obnoxious bug
     link = "{}\n".format(link)
-    with open(self.cache_file, 'r') as f:
+
+    if not os.path.exists(CACHE_FILE):
+        touch_file(CACHE_FILE)
+
+    with open(CACHE_FILE, 'r') as f:
         cache = f.readlines()
     if link in cache:
         return True
@@ -52,15 +65,15 @@ def call_downloader(outpath, link):
     c = "youtube-dl -x --audio-format=mp3 -o {} {}".format(outpath, link)
     cmd = shlex.split(c)
     subprocess.check_output(cmd)
-    with open(cache_file, 'a+') as f:
+    with open(CACHE_FILE, 'a+') as f:
         f.write("{}\n".format(link))
 
 
 def main(channels, cfg):
+    parse_config(cfg)
     log.info('Initialized youtube processor')
-    BASE_OUT = cfg.settings()['dir']
     for chan in channels:
         log.info("Processing {}".format(chan))
-        out = pexpand(os.path.join(BASE_OUT, chan))
+        out = pexpand(os.path.join(OUT_DIR, chan))
         output_dir(out)
         download(channels[chan], out)

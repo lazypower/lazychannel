@@ -7,6 +7,7 @@ from lazychannel import sync
 CFG_YML = """settings:
     dir: ~/Music
     limit: 15
+    cache: "{}.cache"
 channels:
     youtube:
         osdir: 123123

@@ -14,7 +14,7 @@ LazyChannel can be run from a cron job, or manually from the CLI. Before you do 
 
 This will generate a boilerplate config.yaml in ~/.lazychannel
 
-   settings:
+    settings:
         dir: ~/Music/lazychannel
         limit: 5
         cache: "{}.cache"
@@ -32,5 +32,3 @@ This will generate a boilerplate config.yaml in ~/.lazychannel
 ## Support
 
 Visit our [Github Issues](https://github.com/chuckbutler/lazychannel/issues)
-
-

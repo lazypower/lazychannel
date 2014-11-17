@@ -2,10 +2,10 @@ from distutils.core import setup
 from setuptools import find_packages
 
 CLASSIFIERS = [
-    'Intended Audience :: Robots',
-    'License :: OSI Approved :: LGPLV3 License',
-    'Operating System :: OS Independent',
-    'Topic :: Media Aggregation',
+    'Development Status :: 3 - Alpha',
+    'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+    'Environment :: Console',
+    'Topic :: Multimedia :: Sound/Audio',
 ]
 
 setup(

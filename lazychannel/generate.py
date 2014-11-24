@@ -19,8 +19,9 @@ def create_config(ws, cfg):
         f.write("    dir: ~/Music/lazychannel\n")
         f.write("    limit: 5\n")
         f.write('    cache: "{}.cache"\n')
-        f.write("youtube:\n")
-        f.write("    ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
+        f.write("channels:\n")
+        f.write("    youtube:\n")
+        f.write("        ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
         logging.info('Created skeleton config. Populate with data')
 
 

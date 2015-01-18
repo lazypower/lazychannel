@@ -20,7 +20,7 @@ def parse_config(cfg):
     global CACHE_FILE
     global LIMIT
     OUT_DIR = settings['dir']
-    CACHE_FILE = os.path.join(cfg.dir, settings['cache'].format('youtube'))
+    CACHE_FILE = os.path.join(cfg.dir, 'youtube.cache')
     LIMIT = settings['limit']
 
 

@@ -10,7 +10,7 @@ CLASSIFIERS = [
 
 setup(
     name="lazychannel",
-    version="0.1.3",
+    version="0.1.4",
     description="Fetch media from remote sources daily!",
     author="Charles Butler",
     author_email="chuck@dasroot.net",

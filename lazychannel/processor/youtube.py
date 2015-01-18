@@ -5,21 +5,23 @@ import shlex
 import os
 import unicodedata as ucode
 from lazychannel.helpers import pexpand, output_dir, touch_file
-
+import ipdb
 log = logging.getLogger('lazychannel.worker.youtube')
 LIMIT = 50
 BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results={}&alt=json&orderby=published&author={}"
 CACHE_FILE = 'foo.cache'
-OUT_DIR = os.path.join(os.path.sep, 'tmp')
-
+AUDIO_DIR = os.path.join(os.path.sep, 'tmp')
+VIDEO_DIR = os.path.join(os.path.sep, 'tmp')
 
 
 def parse_config(cfg):
     settings = cfg.settings()
-    global OUT_DIR
+    global AUDIO_DIR
+    global VIDEO_DIR
     global CACHE_FILE
     global LIMIT
-    OUT_DIR = settings['dir']
+    AUDIO_DIR = settings['audiodir']
+    VIDEO_DIR = settings['videodir']
     CACHE_FILE = os.path.join(cfg.dir, 'youtube.cache')
     LIMIT = settings['limit']
 
@@ -30,7 +32,7 @@ def fetch_channel(uuid):
     return channel_list
 
 
-def download(uuid, out):
+def download(uuid, out, media='audio'):
     videos = fetch_channel(uuid)
     if 'entry' not in videos['feed']:
         log.error('No feed found, assuming account deleted.')
@@ -41,7 +43,7 @@ def download(uuid, out):
         title = title.encode('ascii', 'ignore')
         if not in_cache(link):
             log.info('Fetching {}'.format(title))
-            call_downloader(out, link)
+            call_downloader(out, link, media)
         else:
             log.debug('Cache Hit on: {} - skipping'.format(title))
 
@@ -60,9 +62,12 @@ def in_cache(link):
     return False
 
 
-def call_downloader(outpath, link):
+def call_downloader(outpath, link, media='audio'):
     outpath = "{}{}%(title)s.%(ext)s".format(outpath, os.path.sep)
-    c = "youtube-dl -x --audio-format=mp3 -o {} {}".format(outpath, link)
+    if media == 'video':
+        c = "youtube-dl -o {} {}".format(outpath, link)
+    else:
+        c = "youtube-dl -x --audio-format=mp3 -o {} {}".format(outpath, link)
     cmd = shlex.split(c)
     subprocess.check_output(cmd)
     with open(CACHE_FILE, 'a+') as f:
@@ -72,8 +77,15 @@ def call_downloader(outpath, link):
 def main(channels, cfg):
     parse_config(cfg)
     log.info('Initialized youtube processor')
-    for chan in channels:
-        log.info("Processing {}".format(chan))
-        out = pexpand(os.path.join(OUT_DIR, chan))
-        output_dir(out)
-        download(channels[chan], out)
+    # Extra loop for different formats - they need to be handled differently
+    # related to issue #5
+    for media in channels:
+        for chan in channels[media]:
+            log.info("Processing {}: {}".format(media, chan))
+            if media == 'video':
+                ipdb.set_trace()
+                out = pexpand(os.path.join(VIDEO_DIR, chan))
+            else:
+                out = pexpand(os.path.join(AUDIO_DIR, chan))
+            output_dir(out)
+            download(channels[media][chan], out, media)

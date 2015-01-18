@@ -16,11 +16,15 @@ def create_config(ws, cfg):
 
     with open(cfg.config, 'w+') as f:
         f.write("settings:\n")
-        f.write("    dir: ~/Music/lazychannel\n")
-        f.write("    limit: 5\n")
+        f.write("    audiodir: ~/Music/lazychannel\n")
+        f.write("    videodir: ~/Videos/lazychannel\n")
+        f.write("    limit: 2\n")
         f.write("channels:\n")
         f.write("    youtube:\n")
-        f.write("        ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
+        f.write("        audio:\n")
+        f.write("            ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
+        f.write("        video:\n")
+        f.write("            LinuxMusicMaster: MusicMasterUnlimited\n")
         logging.info('Created skeleton config. Populate with data')
 
 

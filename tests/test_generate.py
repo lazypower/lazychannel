@@ -12,6 +12,7 @@ youtube:
     osdir: 123123
 """
 
+
 class TestConfig(unittest.TestCase):
 
     @patch("lazychannel.generate.os.makedirs")
@@ -21,11 +22,11 @@ class TestConfig(unittest.TestCase):
         mo.return_value.__exit__ = Mock()
         cfg = MagicMock()
         cfg.exists.return_value = False
-        mkm.side_effect= Exception("Boom!")
+        mkm.side_effect = Exception("Boom!")
         generate.log = MagicMock()
 
         generate.create_config('/tmp', cfg)
-        mo.return_value.write.assert_called_with("    name: uuid")
+        mo.return_value.write.assert_called_with("        ArgoFoxCreativeCommons: UC56Qctnsu8wAyvzf4Yx6LIw\n")
         generate.log.debug.assert_called_once()
 
     @patch('builtins.open' if sys.version_info > (3,) else '__builtin__.open')

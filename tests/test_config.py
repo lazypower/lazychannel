@@ -1,7 +1,7 @@
 import unittest
 import sys
 import yaml
-from mock import patch, Mock, MagicMock
+from mock import patch, Mock
 from lazychannel.config import config
 
 CFG_YML = """settings:
@@ -39,14 +39,11 @@ class TestConfig(unittest.TestCase):
         c = config('/tmp').load_config()
         self.assertEqual(c['settings']['limit'], 15)
 
-    @patch('lazychannel.config.config.log')
     @patch('lazychannel.config.config.exists')
-    def test_load_config(self, exmock, mlog):
+    def test_load_config(self, exmock):
         exmock.return_value = False
         c = config('/tmp')
         self.assertRaises(Exception, c.load_config)
-        mlog.critical.assert_called_once()
-
 
     @patch('lazychannel.config.config.load_config')
     @patch('lazychannel.config.config.exists')
@@ -54,7 +51,8 @@ class TestConfig(unittest.TestCase):
         me.return_value = True
         mlc.return_value = yaml.load(CFG_YML)
         c = config('/tmp')
-        self.assertEqual(c.settings(), {'dir': '~/Music', 'limit': 15})
+        self.assertEqual(c.settings(), {'cache': '{}.cache', 'dir': '~/Music',
+                         'limit': 15})
 
     @patch('lazychannel.config.config.load_config')
     @patch('lazychannel.config.config.exists')

@@ -5,7 +5,7 @@ import shlex
 import os
 import unicodedata as ucode
 from lazychannel.helpers import pexpand, output_dir, touch_file
-import ipdb
+
 log = logging.getLogger('lazychannel.worker.youtube')
 LIMIT = 50
 BASE_URL = "http://gdata.youtube.com/feeds/api/videos?max-results={}&alt=json&orderby=published&author={}"
@@ -83,7 +83,6 @@ def main(channels, cfg):
         for chan in channels[media]:
             log.info("Processing {}: {}".format(media, chan))
             if media == 'video':
-                ipdb.set_trace()
                 out = pexpand(os.path.join(VIDEO_DIR, chan))
             else:
                 out = pexpand(os.path.join(AUDIO_DIR, chan))

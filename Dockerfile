@@ -15,7 +15,7 @@ RUN pip install -r /project/requirements.txt
 RUN rm -rf /project
 
 WORKDIR /project
-CMD pip install -r /project/requirements.txt && nosetests --with-xunit  --traverse-namespace --with-xcoverage --cover-package=encryptor --cover-html -v
+CMD pip install -r /project/requirements.txt && nosetests --traverse-namespace --cover-package=lazychannel --cover-html -v
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

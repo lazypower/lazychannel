@@ -1,3 +1,8 @@
+# THIS PROJECT IS DEPRECIATED
+
+Due to the nature of this application, it was ripe for abuse, and has therefore been discontinued. No further updates will be made to this repository.
+
+
 #Lazy Channel
 
 lazychannel is a python project intended to be used in the aggregation of Creative Commons music from various sources around the internet.
